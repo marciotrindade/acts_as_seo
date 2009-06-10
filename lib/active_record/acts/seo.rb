@@ -50,8 +50,13 @@ module ActiveRecord
         def acts_as_seo
           include ActiveRecord::Acts::SEO::InstanceMethods
           
-          has_one :seo, :as => :metatagable, :class_name => "Metatag", :autosave => true
-          before_save :save_metatag if Rails.version < "2.3.2"
+          options = {:as => :metatagable, :class_name => "Metatag"}
+          if Rails.version < "2.3.2"
+            before_save :save_metatag
+          else
+            options[:autosave] = true
+          end
+          has_one :seo, options
         end
       end
     end
